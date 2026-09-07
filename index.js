@@ -3,7 +3,8 @@ const qrcode = require('qrcode-terminal');
 const puppeteer = require('puppeteer'); // full Puppeteer
 
 (async () => {
-    const executablePath = puppeteer.executablePath(); // bundled Chromium
+    // Puppeteer’s bundled Chromium path
+    const executablePath = puppeteer.executablePath();
 
     const client = new Client({
         authStrategy: new LocalAuth({ dataPath: './sessions' }),
