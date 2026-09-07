@@ -1,0 +1,13 @@
+{
+  "name": "whatsapp-bot",
+  "version": "1.3.0",
+  "description": "WhatsApp Web bot with time-based personalization and saved contact logic",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "whatsapp-web.js": "^1.23.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
