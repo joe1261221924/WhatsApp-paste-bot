@@ -3,7 +3,7 @@ const qrcode = require('qrcode-terminal');
 const puppeteer = require('puppeteer');
 
 (async () => {
-    // Puppeteer now provides its own executable path
+    // Puppeteer bundles its own Chromium, so just use its path
     const executablePath = puppeteer.executablePath();
 
     const client = new Client({
