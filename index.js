@@ -7,7 +7,8 @@ const triggerWordHello = process.env.TRIGGER_HELLO || 'hello';
 const triggerWordHelp = process.env.TRIGGER_HELP || 'help';
 
 const client = new Client({
-    authStrategy: new LocalAuth({ dataPath: '/data/sessions' })
+    // ✅ Fixed path: use local folder instead of /data
+    authStrategy: new LocalAuth({ dataPath: './sessions' })
 });
 
 client.on('qr', qr => {
@@ -35,7 +36,6 @@ client.on('message', msg => {
     const text = msg.body.toLowerCase();
     const isSavedContact = msg._data.isMyContact || false;
 
-    // Non-saved contacts → full auto-reply
     if (!isSavedContact) {
         if (text.includes(triggerWordPaste)) {
             const replies = [
@@ -54,10 +54,7 @@ client.on('message', msg => {
         } else if (text.includes(triggerWordHelp)) {
             msg.reply(`${timeGreeting()}! Here’s how I can assist:\n1️⃣ Contact info\n2️⃣ Quick tips\n3️⃣ Fun fact 🎉`);
         }
-    }
-
-    // Saved contacts → reply only to greetings
-    else {
+    } else {
         if (text.includes(triggerWordHello)) {
             const replies = [
                 `${timeGreeting()}! 👋`,
