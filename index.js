@@ -1,41 +1,52 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const puppeteer = require('puppeteer'); // ✅ use full puppeteer
 
-const client = new Client({
-    authStrategy: new LocalAuth({ dataPath: './sessions' }),
-    puppeteer: {
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, // ✅ use env var only
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    }
-});
-
-client.on('qr', qr => {
-    qrcode.generate(qr, { small: true });
-});
-
-client.on('ready', () => {
-    console.log('Bot is ready!');
-});
-
-// Load trigger variants dynamically from environment variable
-const triggerVariants = process.env.TRIGGER_VARIANTS
-    ? process.env.TRIGGER_VARIANTS.split(',').map(v => v.trim().toLowerCase())
-    : [];
-
-function containsPasteTrigger(text) {
-    const lower = text.toLowerCase();
-    return triggerVariants.some(trigger => lower.includes(trigger));
+async function getExecutablePath() {
+    const browserFetcher = puppeteer.createBrowserFetcher();
+    const revisionInfo = await browserFetcher.download(puppeteer.browserRevision);
+    return revisionInfo.executablePath;
 }
 
-client.on('message', msg => {
-    const text = msg.body.toLowerCase();
+(async () => {
+    const executablePath = await getExecutablePath();
 
-    // Only reply in groups
-    if (msg.from.includes('@g.us')) {
-        if (containsPasteTrigger(text)) {
-            msg.reply('0114412455');
+    const client = new Client({
+        authStrategy: new LocalAuth({ dataPath: './sessions' }),
+        puppeteer: {
+            executablePath, // ✅ Puppeteer-managed path
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
         }
-    }
-});
+    });
 
-client.initialize();
+    client.on('qr', qr => {
+        qrcode.generate(qr, { small: true });
+    });
+
+    client.on('ready', () => {
+        console.log('Bot is ready!');
+    });
+
+    // Load trigger variants dynamically from environment variable
+    const triggerVariants = process.env.TRIGGER_VARIANTS
+        ? process.env.TRIGGER_VARIANTS.split(',').map(v => v.trim().toLowerCase())
+        : [];
+
+    function containsPasteTrigger(text) {
+        const lower = text.toLowerCase();
+        return triggerVariants.some(trigger => lower.includes(trigger));
+    }
+
+    client.on('message', msg => {
+        const text = msg.body.toLowerCase();
+
+        // Only reply in groups
+        if (msg.from.includes('@g.us')) {
+            if (containsPasteTrigger(text)) {
+                msg.reply('0114412455');
+            }
+        }
+    });
+
+    client.initialize();
+})();
