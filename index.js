@@ -7,8 +7,11 @@ const triggerWordHello = process.env.TRIGGER_HELLO || 'hello';
 const triggerWordHelp = process.env.TRIGGER_HELP || 'help';
 
 const client = new Client({
-    // ✅ Fixed path: use local folder instead of /data
-    authStrategy: new LocalAuth({ dataPath: './sessions' })
+    authStrategy: new LocalAuth({ dataPath: './sessions' }),
+    puppeteer: {
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/opt/render/.cache/puppeteer/chrome/linux-146.0.7680.31/chrome-linux64/chrome',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    }
 });
 
 client.on('qr', qr => {
