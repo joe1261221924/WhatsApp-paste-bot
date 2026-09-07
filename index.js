@@ -1,10 +1,9 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer'); // ✅ full Puppeteer, not puppeteer-core
 
 (async () => {
-    // Puppeteer bundles its own Chromium, so just use its path
-    const executablePath = puppeteer.executablePath();
+    const executablePath = puppeteer.executablePath(); // Puppeteer’s bundled Chromium
 
     const client = new Client({
         authStrategy: new LocalAuth({ dataPath: './sessions' }),
@@ -17,7 +16,7 @@ const puppeteer = require('puppeteer');
     client.on('qr', qr => qrcode.generate(qr, { small: true }));
     client.on('ready', () => console.log('Bot is ready!'));
 
-    // Load trigger variants dynamically from environment variable
+    // Load trigger variants dynamically from Render environment variable
     const triggerVariants = process.env.TRIGGER_VARIANTS
         ? process.env.TRIGGER_VARIANTS.split(',').map(v => v.trim().toLowerCase())
         : [];
