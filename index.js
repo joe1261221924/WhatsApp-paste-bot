@@ -17,10 +17,11 @@ client.on('ready', () => {
     console.log('Bot is ready!');
 });
 
-// Keywords and phrases that should trigger the number reply
+// Expanded trigger list
 const pasteTriggers = [
     "paste", "mpaste", "pastini", "first", "1", "2", "3", "4", "5",
-    "tupaste", "leta number", "enjoy", "kunywa soda", "kunywa"
+    "tupaste", "leta number", "enjoy", "kunywa soda", "kunywa",
+    "early bird", "active", "two", "one"
 ];
 
 // Helper: check if message contains any trigger
