@@ -1,9 +1,8 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const puppeteer = require('puppeteer'); // full Puppeteer
+const puppeteer = require('puppeteer');
 
 (async () => {
-    // Force whatsapp-web.js to use Puppeteer’s bundled Chromium
     const executablePath = puppeteer.executablePath();
 
     const client = new Client({
