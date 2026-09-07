@@ -1,1 +1,0 @@
-# WhatsApp-paste-bot
