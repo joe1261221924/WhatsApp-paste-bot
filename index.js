@@ -1,9 +1,10 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const puppeteer = require('puppeteer'); // ✅ full Puppeteer, not puppeteer-core
+const puppeteer = require('puppeteer'); // ✅ full Puppeteer
 
 (async () => {
-    const executablePath = puppeteer.executablePath(); // Puppeteer’s bundled Chromium
+    // Use Puppeteer’s bundled Chromium
+    const executablePath = puppeteer.executablePath();
 
     const client = new Client({
         authStrategy: new LocalAuth({ dataPath: './sessions' }),
