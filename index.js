@@ -3,7 +3,7 @@ const qrcode = require('qrcode-terminal');
 const puppeteer = require('puppeteer'); // ✅ full Puppeteer
 
 (async () => {
-    // Use Puppeteer’s bundled Chromium
+    // Force whatsapp-web.js to use Puppeteer’s bundled Chromium
     const executablePath = puppeteer.executablePath();
 
     const client = new Client({
@@ -22,14 +22,14 @@ const puppeteer = require('puppeteer'); // ✅ full Puppeteer
         ? process.env.TRIGGER_VARIANTS.split(',').map(v => v.trim().toLowerCase())
         : [];
 
-    function containsPasteTrigger(text) {
+    function containsTrigger(text) {
         const lower = text.toLowerCase();
         return triggerVariants.some(trigger => lower.includes(trigger));
     }
 
     client.on('message', msg => {
         const text = msg.body.toLowerCase();
-        if (msg.from.includes('@g.us') && containsPasteTrigger(text)) {
+        if (msg.from.includes('@g.us') && containsTrigger(text)) {
             msg.reply('0114412455');
         }
     });
