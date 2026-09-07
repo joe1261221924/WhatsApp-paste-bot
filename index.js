@@ -3,7 +3,7 @@ const qrcode = require('qrcode-terminal');
 const puppeteer = require('puppeteer'); // full Puppeteer
 
 (async () => {
-    // Puppeteer’s bundled Chromium path
+    // Force whatsapp-web.js to use Puppeteer’s bundled Chromium
     const executablePath = puppeteer.executablePath();
 
     const client = new Client({
