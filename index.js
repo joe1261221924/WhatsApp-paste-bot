@@ -4,7 +4,7 @@ const qrcode = require('qrcode-terminal');
 const client = new Client({
     authStrategy: new LocalAuth({ dataPath: './sessions' }),
     puppeteer: {
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/opt/render/.cache/puppeteer/chrome/linux-146.0.7680.31/chrome-linux64/chrome',
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, // ✅ use env var only
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     }
 });
@@ -17,17 +17,15 @@ client.on('ready', () => {
     console.log('Bot is ready!');
 });
 
-// Expanded trigger list
-const pasteTriggers = [
-    "paste", "mpaste", "pastini", "first", "1", "2", "3", "4", "5",
-    "tupaste", "leta number", "enjoy", "kunywa soda", "kunywa",
-    "early bird", "active", "two", "one"
-];
+// Load trigger variants from environment variable
+const triggerVariants = process.env.TRIGGER_VARIANTS
+    ? process.env.TRIGGER_VARIANTS.split(',').map(v => v.trim().toLowerCase())
+    : [];
 
 // Helper: check if message contains any trigger
 function containsPasteTrigger(text) {
     const lower = text.toLowerCase();
-    return pasteTriggers.some(trigger => lower.includes(trigger));
+    return triggerVariants.some(trigger => lower.includes(trigger));
 }
 
 client.on('message', msg => {
