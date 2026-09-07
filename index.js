@@ -1,11 +1,6 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
-// Environment variables for keywords
-const triggerWordPaste = process.env.TRIGGER_PASTE || 'paste';
-const triggerWordHello = process.env.TRIGGER_HELLO || 'hello';
-const triggerWordHelp = process.env.TRIGGER_HELP || 'help';
-
 const client = new Client({
     authStrategy: new LocalAuth({ dataPath: './sessions' }),
     puppeteer: {
@@ -22,49 +17,25 @@ client.on('ready', () => {
     console.log('Bot is ready!');
 });
 
-// Utility: random reply picker
-function randomReply(replies) {
-    return replies[Math.floor(Math.random() * replies.length)];
-}
+// Keywords and phrases that should trigger the number reply
+const pasteTriggers = [
+    "paste", "mpaste", "pastini", "first", "1", "2", "3", "4", "5",
+    "tupaste", "leta number", "enjoy", "kunywa soda", "kunywa"
+];
 
-// Utility: time-based greeting
-function timeGreeting() {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning 🌞";
-    else if (hour < 18) return "Good afternoon ☀️";
-    else return "Good evening 🌙";
+// Helper: check if message contains any trigger
+function containsPasteTrigger(text) {
+    const lower = text.toLowerCase();
+    return pasteTriggers.some(trigger => lower.includes(trigger));
 }
 
 client.on('message', msg => {
     const text = msg.body.toLowerCase();
-    const isSavedContact = msg._data.isMyContact || false;
 
-    if (!isSavedContact) {
-        if (text.includes(triggerWordPaste)) {
-            const replies = [
-                `${timeGreeting()}! Here’s the number: 0114412455 📞`,
-                `Got you covered! 0114412455 ✅`,
-                `Sure thing, 0114412455 🚀`
-            ];
-            msg.reply(randomReply(replies));
-        } else if (text.includes(triggerWordHello)) {
-            const replies = [
-                `${timeGreeting()}! 👋`,
-                `Hello there 🌞`,
-                `Hi! Ready to help 🚀`
-            ];
-            msg.reply(randomReply(replies));
-        } else if (text.includes(triggerWordHelp)) {
-            msg.reply(`${timeGreeting()}! Here’s how I can assist:\n1️⃣ Contact info\n2️⃣ Quick tips\n3️⃣ Fun fact 🎉`);
-        }
-    } else {
-        if (text.includes(triggerWordHello)) {
-            const replies = [
-                `${timeGreeting()}! 👋`,
-                `Hello there 🌞`,
-                `Hi! Hope you’re doing well 🚀`
-            ];
-            msg.reply(randomReply(replies));
+    // Only reply in groups
+    if (msg.from.includes('@g.us')) {
+        if (containsPasteTrigger(text)) {
+            msg.reply('0114412455');
         }
     }
 });
