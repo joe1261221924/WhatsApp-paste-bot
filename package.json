@@ -1,6 +1,6 @@
 {
   "name": "whatsapp-bot",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "WhatsApp Web bot with auto-reply triggers",
   "main": "index.js",
   "scripts": {
